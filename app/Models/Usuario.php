@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
-
+    public $timestamps = false;
     protected $table = 'usuarios';// nombre de la tabla
     protected $fillable = ['username', 'password', 'rol', 'empresa_id'];
 

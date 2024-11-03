@@ -12,6 +12,10 @@ class Empresa extends Model
     protected $table = 'empresas';//nombre de la tabla
     protected $fillable = ['nombre', 'telefono'];
 
+    public $timestamps = false;
+
+
+
     public function usuarios()
     {
         return $this->hasMany(Usuario::class, 'empresa_id');
