@@ -64,7 +64,7 @@
                             @foreach ($empresas as $empresa)
                                 <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
                             @endforeach
-                            <option value="nueva">Agregar Nueva Empresa</option>
+                            <option value="0">Agregar Nueva Empresa + </option>
                         </select>
                     </div>
 
@@ -91,7 +91,7 @@
 <script>
     document.getElementById('empresa_id').addEventListener('change', function () {
         const nuevaEmpresaFields = document.getElementById('nueva_empresa');
-        if (this.value === 'nueva') {
+        if (this.value === '0') {
             nuevaEmpresaFields.style.display = 'block';
         } else {
             nuevaEmpresaFields.style.display = 'none';
