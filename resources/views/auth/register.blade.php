@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-md-6">
+    <div class="col-10 col-lg-6">
         <div class="card shadow-sm">
             <div class="card-header text-center bg-primary text-white">
                 <h4>Registro de Usuario</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body p-3">
                 @if(session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}
@@ -82,6 +82,9 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Registrarse</button>
+                    <div class="text-center mx-auto">
+                        <a href="/login" class="">Inicia Sesion</a>
+                    </div>
                 </form>
 
             </div>

@@ -30,7 +30,7 @@ class LoginController extends Controller
             // Registra el inicio de sesión
             $request->session()->regenerate();
 
-            return redirect()->intended('dashboard');
+            return redirect()->intended('products.dashboard');
         }
 
         return back()->withErrors([
@@ -44,9 +44,7 @@ class LoginController extends Controller
     public function destroy(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/')->with('success', 'Sesión cerrada con éxito.');

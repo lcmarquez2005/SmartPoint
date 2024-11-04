@@ -1,11 +1,11 @@
-<div class="hidden sm:flex justify-end sm:items-center sm:ms-6">
+<div class="flex justify-end sm:items-center sm:ms-6">
     <x-dropdown align="right" width="48">
         <x-slot name="trigger">
             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
                 @if(Auth::check())
                     <div>{{ Auth::user()->username }}</div>
                 @else
-                    <div>Guest</div> <!-- Opcional: mostrar algo como "Guest" si el usuario no está autenticado -->
+                    <div>Invitado</div> <!-- Opcional: mostrar algo como "Guest" si el usuario no está autenticado -->
                 @endif
 
                 <div class="ms-1">
@@ -19,6 +19,7 @@
         <x-slot name="content">
             @if(Auth::check())
 
+                <!-- aqui se agrega un formulario para modificar el usuario :href="route('profile) -->
                 <x-dropdown-link >
                     {{ __('Profile') }}
                 </x-dropdown-link>
@@ -30,12 +31,15 @@
                     <x-dropdown-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Cerrar Sesion') }}
                     </x-dropdown-link>
                 </form>
             @else
                 <x-dropdown-link :href="route('login')">
-                    {{ __('Login') }}
+                    {{ __('Inicia Sesion') }}
+                </x-dropdown-link>
+                <x-dropdown-link :href="route('register')">
+                    {{ __('Registrate') }}
                 </x-dropdown-link>
             @endif
         </x-slot>
