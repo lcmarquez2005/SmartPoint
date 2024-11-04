@@ -35,7 +35,7 @@ class AuthController extends Controller
             // Registra el inicio de sesión
             $request->session()->regenerate();
 
-            return redirect()->intended('products.dashboard');
+            return redirect()->intended('products');
         }
 
         return back()->withErrors([
