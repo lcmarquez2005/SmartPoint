@@ -7,6 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema SmartPoint
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `SmartPoint` ;
 
 -- -----------------------------------------------------
 -- Schema SmartPoint
@@ -34,7 +35,8 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`clientes` (
   `ciudad` VARCHAR(50) NOT NULL,
   `estado` VARCHAR(50) NOT NULL,
   `pais` VARCHAR(45) NOT NULL DEFAULT 'Mexico',
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8mb4;
@@ -53,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`abonos_clientes` (
   PRIMARY KEY (`id`, `cliente_id`),
   INDEX `fk_abonos_clientes1_idx` (`cliente_id` ASC) VISIBLE,
   UNIQUE INDEX `monto_UNIQUE` (`monto` ASC) VISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `fk_abonos_clientes1`
     FOREIGN KEY (`cliente_id`)
     REFERENCES `SmartPoint`.`clientes` (`id`)
@@ -81,7 +84,8 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`proveedores` (
   `ciudad` VARCHAR(50) NOT NULL,
   `estado` VARCHAR(50) NOT NULL,
   `pais` VARCHAR(50) NOT NULL DEFAULT 'Mexico',
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8mb4;
@@ -99,6 +103,7 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`abonos_proveedores` (
   `proveedor_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`, `proveedor_id`),
   INDEX `fk_abonospro_proveedores1_idx` (`proveedor_id` ASC) VISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `fk_abonospro_proveedores1`
     FOREIGN KEY (`proveedor_id`)
     REFERENCES `SmartPoint`.`proveedores` (`id`)
@@ -118,7 +123,8 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`empresas` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   `telefono` VARCHAR(11) NOT NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -137,6 +143,7 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`usuarios` (
   PRIMARY KEY (`id`, `empresa_id`),
   INDEX `fk_usuarios_config1_idx` (`empresa_id` ASC) VISIBLE,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `fk_usuarios_config1`
     FOREIGN KEY (`empresa_id`)
     REFERENCES `SmartPoint`.`empresas` (`id`)
@@ -162,6 +169,7 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`ventas` (
   PRIMARY KEY (`id`, `usuario_id`, `cliente_id`),
   INDEX `fk_ventas_clientes1_idx` (`cliente_id` ASC) VISIBLE,
   INDEX `fk_ventas_usuarios1_idx` (`usuario_id` ASC) VISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `fk_ventas_clientes1`
     FOREIGN KEY (`cliente_id`)
     REFERENCES `SmartPoint`.`clientes` (`id`)
@@ -190,7 +198,8 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`productos` (
   `st_minimos` DECIMAL(10,2) NULL DEFAULT NULL,
   `st_maximos` DECIMAL(10,2) NULL DEFAULT NULL,
   `piezas` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`cod_pro`))
+  PRIMARY KEY (`cod_pro`),
+  UNIQUE INDEX `cod_pro_UNIQUE` (`cod_pro` ASC) VISIBLE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 10
 DEFAULT CHARACTER SET = utf8mb4;
@@ -238,6 +247,7 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`surtidos` (
   PRIMARY KEY (`id`, `usuario_id`, `proveedor_id`),
   INDEX `fk_surtir_proveedor1_idx` (`proveedor_id` ASC) VISIBLE,
   INDEX `fk_surtir_usuarios1_idx` (`usuario_id` ASC) VISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `fk_surtir_proveedor1`
     FOREIGN KEY (`proveedor_id`)
     REFERENCES `SmartPoint`.`proveedores` (`id`)
@@ -295,6 +305,7 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`transacciones` (
   `usuario_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`, `usuario_id`),
   INDEX `fk_transaccioncaja_usuarios1_idx` (`usuario_id` ASC) VISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `fk_transaccioncaja_usuarios1`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `SmartPoint`.`usuarios` (`id`)
@@ -303,6 +314,25 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`transacciones` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 21
 DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `SmartPoint`.`devoluciones`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SmartPoint`.`devoluciones` ;
+
+CREATE TABLE IF NOT EXISTS `SmartPoint`.`devoluciones` (
+  `cod_pro` VARCHAR(50) NOT NULL,
+  `venta_id` INT(11) NOT NULL,
+  `descripcion` VARCHAR(45) NULL,
+  `fecha` VARCHAR(45) NULL,
+  PRIMARY KEY (`cod_pro`, `venta_id`),
+  CONSTRAINT `fk_Devoluciones_detalles_ventas1`
+    FOREIGN KEY (`cod_pro` , `venta_id`)
+    REFERENCES `SmartPoint`.`detalles_ventas` (`cod_pro` , `venta_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
