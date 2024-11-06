@@ -14,6 +14,8 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-semibold mb-4">Listado de Productos</h3>
 
+                    <button :href="route('login')" class="btn btn-primary">Nuevo Producto +</button>
+                    
                     <table class="min-w-full dark:bg-gray-800">
                         <thead>
                             <tr>

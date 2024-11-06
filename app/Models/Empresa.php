@@ -12,7 +12,7 @@ class Empresa extends Model
     protected $table = 'empresas';//nombre de la tabla
     protected $fillable = ['nombre', 'telefono'];//atributos llenables
 
-    // public $timestamps = false;//! laravel genera por defecto atributos created-at,updated-at para todo model
+    public $timestamps = false;//! laravel genera por defecto atributos created-at,updated-at para todo model
                                 // false porque no lo usaremos
 
 
