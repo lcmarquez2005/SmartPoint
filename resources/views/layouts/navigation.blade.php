@@ -16,10 +16,9 @@
             </button>
         </x-slot>
 
+
         <x-slot name="content">
             @if(Auth::check())
-
-                <!-- aqui se agrega un formulario para modificar el usuario :href="route('profile) -->
                 <x-dropdown-link >
                     {{ __('Profile') }}
                 </x-dropdown-link>
