@@ -5,8 +5,6 @@
         </h2>
     </x-slot>
     
-
-    
     @section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -25,6 +23,7 @@
                                 <th class="py-2 px-4 border-b dark:border-gray-700">Min. Recomendado</th>
                                 <th class="py-2 px-4 border-b dark:border-gray-700">Max. Recomendado</th>
                                 <th class="py-2 px-4 border-b dark:border-gray-700">Piezas</th>
+                                <th class="py-2 px-4 border-b dark:border-gray-700">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,19 +36,40 @@
                                     <td class="py-2 px-4 border-b dark:border-gray-700">{{ number_format($product->st_minimos, 2) }}</td>
                                     <td class="py-2 px-4 border-b dark:border-gray-700">{{ number_format($product->st_maximos, 2) }}</td>
                                     <td class="py-2 px-4 border-b dark:border-gray-700">{{ number_format($product->piezas, 2) }}</td>
+                                    <td class="py-2 px-4 border-b dark:border-gray-700">
+                                        <a href="{{ route('products.edit', $product->cod_pro) }}" class="btn w-100 mb-2 btn-primary">Editar</a>
+                                        
+                                        <!-- Formulario de eliminación con confirmación -->
+                                        <form action="{{ route('products.destroy', $product->cod_pro) }}" method="POST" onsubmit="return confirmDelete(event)">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn w-100 btn-danger">Eliminar</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
 
                     @if ($products->isEmpty())
-                        <p class="mt-4 text-gray-600 dark:text-gray-300">No products available.</p>
+                        <p class="mt-4 text-gray-600 dark:text-gray-300">No hay productos disponibles.</p>
                     @endif
                 </div>
             </div>
         </div>
     </div>
-
     @endsection
 
+    @push('scripts')
+        <script>
+            // Función para confirmar la eliminación
+            function confirmDelete(event) {
+                // Muestra el cuadro de confirmación
+                if (!confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+                    // Si el usuario cancela, previene el envío del formulario
+                    event.preventDefault();
+                }
+            }
+        </script>
+    @endpush
 </x-app-layout>

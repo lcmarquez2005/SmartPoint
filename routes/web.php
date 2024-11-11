@@ -21,8 +21,8 @@ Route::post('/login', [AuthController::class, 'store']);
 Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
 
-Route::get('/products/', [ProductoController::class, 'index'])->middleware('auth')->name('dashboard');
-Route::get('/', [ProductoController::class, 'index'])->middleware('auth')->name('dashboard');//vista de inicio si esta autenticado
+Route::get('/products/', [ProductoController::class, 'index'])->middleware('auth')->name('products.index');
+Route::get('/', [ProductoController::class, 'index'])->middleware('auth')->name('products.index');//vista de inicio si esta autenticado
 
 
 
@@ -34,6 +34,13 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/products/create', [ProductoController::class, 'create'])->middleware('auth')->name('products.create');
 Route::post('/products/store', [ProductoController::class, 'store'])->middleware('auth')->name('products.store');
 
+
+// Ruta para mostrar el formulario de edición del producto
+Route::get('/products/{product}/edit', [ProductoController::class, 'edit'])->middleware('auth')->name('products.edit');
+// Ruta para actualizar el producto
+Route::put('/products/{product}', [ProductoController::class, 'update'])->middleware('auth')->name('products.update');
+
+Route::delete('/products/{product}', [ProductoController::class, 'destroy'])->name('products.destroy');
 
 Route::get('/', function () {  
     return view('welcome');

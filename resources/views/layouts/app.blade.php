@@ -33,6 +33,7 @@
                 @yield('content')  
             </main>
         </div>
-
+        
+        @stack('scripts') <!-- Permite incluir scripts específicos -->
     </body>
 </html>
