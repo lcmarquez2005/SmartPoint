@@ -31,8 +31,8 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 //redirecciona a crear producto unicarmente si esta autenticado
-Route::get('/products/create', [ProductoController::class, 'create'])->middleware('auth');
-
+Route::get('/products/create', [ProductoController::class, 'create'])->middleware('auth')->name('products.create');
+Route::post('/products/store', [ProductoController::class, 'store'])->middleware('auth')->name('products.store');
 
 
 Route::get('/', function () {  
