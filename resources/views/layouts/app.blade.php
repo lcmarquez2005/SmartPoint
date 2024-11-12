@@ -12,12 +12,17 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/css/styles.css', 'resources/css/navbar.css', 'resources/js/app.js'])
         <!-- Agregar Bootstrap CSS -->
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="w-100 min-h-screen bg-gray-100 dark:bg-gray-900">
+            @auth
+            @include('layouts.navbar')
+            @endauth
+            @guest
             @include('layouts.navigation')
+            @endguest
 
             <!-- Page Heading -->
             @if (isset($header))
@@ -30,7 +35,13 @@
 
             <!-- Page Content -->
             <main>
+            @auth
+                <div class="main-content">
+            @endauth
                 @yield('content')  
+            @auth
+                </div>
+            @endauth
             </main>
         </div>
         

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-around min-vh-100">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-around">
         <img src="{{ asset('images/smartpoint-login.png') }}" alt="Logo" class="img-fluid col-8 col-sm-4">
         <div class="col-md-6">
             <div class="card">
