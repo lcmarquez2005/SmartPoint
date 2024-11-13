@@ -1,6 +1,6 @@
    /* Barra lateral */
    .sidebar {
-    width: 250px;
+    width: 170px;
     height: 100vh;
     background-color: #1a237e;
     position: fixed;
@@ -8,13 +8,12 @@
     top: 0;
     padding-top: 20px;
 }
-
 /* Encabezado */
 .header {
     background-color: #000033;
     color: white;
     padding: 15px;
-    margin-left: 250px;
+    margin-left: 170px;
 }
 
 .header h1 {
@@ -78,8 +77,8 @@
 
 /* Area de contenido principal */
 .main-content {
-    margin-left: 250px;
     padding: 20px;
+    margin-left: 170px;
 }
 
 /* Producto html */

@@ -35,7 +35,7 @@
             <a href=""><i class="bi bi-gear"></i> Gestión</a>
         </li>
         <li>
-            <a href="><i class="bi bi-sliders"></i> Configuración</a>
+            <a href="""><i class="bi bi-sliders"></i> Configuración</a>
         </li>
     </ul>
 </div>
