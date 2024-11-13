@@ -7,10 +7,7 @@
             @if(Auth::check())
                 {{ Auth::user()->username }}
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <input type="submit" value="Salir">
-                </form>
+
             @else
                 Invitado
             @endif

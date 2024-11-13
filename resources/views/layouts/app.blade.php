@@ -16,7 +16,7 @@
         <!-- Agregar Bootstrap CSS -->
     </head>
     <body class="font-sans antialiased">
-        <div class="w-100 min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @auth
             @include('layouts.navbar')
             @endauth
@@ -26,11 +26,27 @@
 
             <!-- Page Heading -->
             @if (isset($header))
+                @guest
+                    
                 <header class="dark:bg-gray-800 shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
+                @endguest
+                @auth 
+                    <div class="header">
+                        <h1>SMART POINT</h1>
+                        <small>Innovación a Tu Alcance</small>
+                        <a href="#" class="exit-btn">
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <input class="bi bi-box-arrow-right exit-btn btn btn-danger" type="submit" value="Salir">
+                        </form>
+                    </div>
+                @endauth
+                    <!-- Encabezado -->
             @endif
 
             <!-- Page Content -->

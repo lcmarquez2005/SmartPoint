@@ -40,7 +40,7 @@ Route::get('/products/{product}/edit', [ProductoController::class, 'edit'])->mid
 // Ruta para actualizar el producto
 Route::put('/products/{product}', [ProductoController::class, 'update'])->middleware('auth')->name('products.update');
 
-Route::delete('/products/{product}', [ProductoController::class, 'destroy'])->name('products.destroy');
+Route::delete('/products/{product}', [ProductoController::class, 'destroy'])->middleware('auth')->name('products.destroy');
 
 Route::get('/', function () {  
     return view('welcome');
