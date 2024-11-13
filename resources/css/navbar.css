@@ -20,6 +20,7 @@
     color: white;
     font-style: italic;
     margin: 0;
+    font-size: 1.5rem;
 }
 
 /* Seccion de perfil de usuario */
@@ -46,7 +47,8 @@
 }
 
 .nav-menu li {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .nav-menu a {
@@ -64,7 +66,7 @@
 
 .nav-menu i {
     margin-right: 10px;
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
 /* Boton de salida */
