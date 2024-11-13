@@ -1,5 +1,5 @@
    /* Barra lateral */
-   .sidebar {
+.sidebar {
     width: 170px;
     height: 100vh;
     background-color: #1a237e;
@@ -80,6 +80,7 @@
 /* Area de contenido principal */
 .main-content {
     padding: 20px;
+    color: black;
     margin-left: 170px;
 }
 

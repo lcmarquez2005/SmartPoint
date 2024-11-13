@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container text-white">
+<div class="container w-50">
     <h2>Crear Producto</h2>
     @if (session('success'))
         <div class="alert alert-success">

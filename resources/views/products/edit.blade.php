@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container w-50">
         <h2>Editar Producto</h2>
 
         <form action="{{ route('products.update', $product->cod_pro) }}" method="POST">
