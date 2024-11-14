@@ -21,33 +21,37 @@
             @include('layouts.navbar')
             @endauth
             @guest
-            @include('layouts.navigation')
             @endguest
 
             <!-- Page Heading -->
-            @if (isset($header))
-                @guest
-                    
-                <header class="dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-                @endguest
-                @auth 
-                    <div class="header">
-                        <h1>SMART POINT</h1>
-                        <small>Innovación a Tu Alcance</small>
-                        <a href="#" class="exit-btn">
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <input class="bi bi-box-arrow-right exit-btn btn btn-danger" type="submit" value="Salir">
-                        </form>
-                    </div>
-                @endauth
+
+            @guest 
+
+            @endguest
+
+
+            @auth 
+                <div class="header">
+                    <h1>SMART POINT</h1>
+                    <small>Innovación a Tu Alcance</small>
+                    <form class="exit-btn" method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <div class="btn">
+                            <div class="lead text-danger bi bi-box-arrow-right"></div>
+                            <input class="link-warning btn text-danger" type="submit" value="Salir">
+                        </div>
+                    </form>
+                </div>
+            @endauth
+
+            @guest 
+                <div class="header m-0 mb-4">
+                    <h1>SMART POINT</h1>
+                    <small>Innovación a Tu Alcance</small>
+                </div>
+            @endguest
                     <!-- Encabezado -->
-            @endif
+
 
             <!-- Page Content -->
             <main>
