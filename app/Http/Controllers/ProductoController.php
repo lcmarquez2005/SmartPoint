@@ -14,7 +14,7 @@ class ProductoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'cod_pro'=> 'required|string|min:8',
             'nombre' => 'required|string|max:45',
             'cantidad' => 'required|numeric|min:0',//deberiamos manejar que si es por peso, sea gramaje o algo asi
@@ -25,8 +25,7 @@ class ProductoController extends Controller
         ]);
 
         // Aquí puedes crear el producto
-        Producto::create($request->all());
-
+        Producto::create($validatedData);
         
         return redirect()->route('products.index')->with('success', 'Producto creado exitosamente.');
     }
@@ -38,7 +37,7 @@ class ProductoController extends Controller
         $products = Producto::all();
         
         // Pasar los productos a la vista del dashboard
-        return view('products.dashboard', compact('products','pageTitle'));
+        return view('products.index', compact('products','pageTitle'));
     }
 
 
@@ -55,7 +54,7 @@ class ProductoController extends Controller
         {
             // Validación de los datos
             $validatedData = $request->validate([
-                'cod_pro' => 'required|string|max:50',
+                'cod_pro' => 'required|string|min:8',
                 'nombre' => 'required|string|max:255',
                 'cantidad' => 'required|numeric',
                 'precio' => 'required|numeric',

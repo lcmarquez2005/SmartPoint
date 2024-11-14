@@ -4,6 +4,17 @@
     <div class="container w-50">
         <h2>Editar Producto</h2>
 
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+
         <form action="{{ route('products.update', $product->cod_pro) }}" method="POST">
             @csrf
             @method('PUT') <!-- Para indicar que esta es una solicitud de actualización -->

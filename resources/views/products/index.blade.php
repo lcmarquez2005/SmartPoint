@@ -6,6 +6,11 @@
     </x-slot>
     
     @section('content')
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="py-12">
         <div class="max-w-7xl mx-auto">
             <div class="dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
