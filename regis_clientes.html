@@ -52,8 +52,8 @@
         </a>
     </div>
 
-    <!-- Contenido de area principal -->
-    <div class="main-content">
+     <!-- Contenido de area principal -->
+     <div class="main-content">
         <h1 class="text-center mb-4">Clientes</h1>
         <div class="container-md">
             <div class="row justify-content-center">
@@ -61,38 +61,74 @@
                     <!-- Formulario de clientes -->
                     <form class="bg-white p-4 rounded shadow-sm">
                         <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="nombre">Nombre:</label>
+                            <div class="col-12">
+                                <label for="nombre">*Nombre:</label>
                                 <input type="text" class="form-control" id="nombre">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="apellido1">Apellido:</label>
-                                <input type="text" class="form-control" id="apellido1">
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="telefono">Teléfono:</label>
+                                <label for="apellido1">*Apellido paterno:</label>
+                                <input type="text" class="form-control" id="apellido1">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="apellido2">Apellido materno:</label>
+                                <input type="text" class="form-control" id="apellido2">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="telefono">*Teléfono:</label>
                                 <input type="tel" class="form-control" id="telefono">
                             </div>
                             <div class="col-md-6">
-                                <label for="fecha_regis">Fecha de registro:</label>
+                                <label for="fecha_regis">*Fecha de registro:</label>
                                 <input type="text" class="form-control" id="fecha_regis">
                             </div>
                         </div>
 
                         <div class="row mb-3">
+                            <div class="col-12">
+                                <label for="deuda">Deuda:</label>
+                                <input type="text" class="form-control" id="deuda">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="calle">Calle:</label>
+                                <input type="text" class="form-control" id="calle">
+                            </div>
                             <div class="col-md-4">
-                                <label for="ciudad">Ciudad:</label>
+                                <label for="numero">Número:</label>
+                                <input type="text" class="form-control" id="numero">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="colonia">Colonia:</label>
+                                <input type="text" class="form-control" id="colonia">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="C_p">Código postal:</label>
+                                <input type="text" class="form-control" id="C_P">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="ciudad">*Ciudad:</label>
                                 <input type="text" class="form-control" id="ciudad">
                             </div>
                             <div class="col-md-4">
-                                <label for="estado">Estado:</label>
+                                <label for="estado">*Estado:</label>
                                 <input type="text" class="form-control" id="estado">
                             </div>
                             <div class="col-md-4">
-                                <label for="pais">País:</label>
+                                <label for="pais">*País:</label>
                                 <input type="text" class="form-control" id="pais">
                             </div>
                         </div>
@@ -101,7 +137,7 @@
                             <a href="clientes.html" class="btn btn-dark">
                                 <i class="bi bi-save"></i> Guardar
                             </a>
-
+                            </button>
                             <button type="button" class="btn btn-secondary">
                                 <i class="bi bi-arrow-clockwise"></i> Actualizar
                             </button>
