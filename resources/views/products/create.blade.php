@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<a href="{{route('products.index')}}" class="btn btn-danger">
+    <i class="bi bi-arrow-return-left"></i> Volver
+</a>
 <div class="container w-50">
     <h2>Crear Producto</h2>
     @if ($errors->any())
