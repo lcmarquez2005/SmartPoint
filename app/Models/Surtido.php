@@ -37,4 +37,8 @@ class Surtido extends Model
     {
         return $this->belongsTo(Proveedor::class, 'proveedor_id');
     }
+    
+    public function detalles_surtidos() {
+        return $this->hasMany(Detalles_surtido::class, 'surtido_id');
+    }
 }

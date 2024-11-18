@@ -15,15 +15,18 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'cod_pro'=> 'required|string|min:8',
+            'cod_pro'=> 'required|string|min:8|unique:productos,cod_pro',
             'nombre' => 'required|string|max:45',
             'cantidad' => 'required|numeric|min:0',//deberiamos manejar que si es por peso, sea gramaje o algo asi
             'precio' => 'required|numeric|min:0',
             'st_minimos' => 'nullable|numeric|min:0',
             'st_minimos' => 'nullable|numeric|min:0',
             'piezas' => 'nullable|integer|min:0',
+        ],[
+            'cod_pro.unique' => 'El producto ya ha sido registrado.',
+            'nombre.max' => 'El nombre no debe exceder los 45 caracteres',
         ]);
-
+        
         // Aquí puedes crear el producto
         Producto::create($validatedData);
         
@@ -41,12 +44,12 @@ class ProductoController extends Controller
     }
 
 
-        // Método para mostrar el formulario de edición con los datos actuales del producto
-        public function edit($cod_pro)
-        {
-            $product = Producto::where('cod_pro', $cod_pro)->firstOrFail();
-            return view('products.edit', compact('product'));
-        }
+    // Método para mostrar el formulario de edición con los datos actuales del producto
+    public function edit($cod_pro)
+    {
+        $product = Producto::where('cod_pro', $cod_pro)->firstOrFail();
+        return view('products.edit', compact('product'));
+    }
         
     
         // Método para actualizar el productoo en la base de datos
