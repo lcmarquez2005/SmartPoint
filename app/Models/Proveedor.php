@@ -33,4 +33,9 @@ class Proveedor extends Model
     ];
 
     // Si quieres definir valores por defecto o métodos adicionales, hazlo aquí
+
+    public function surtidos()
+    {
+        return $this->hasMany(Surtido::class, 'proveedor_id');
+    }
 }
