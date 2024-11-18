@@ -1,5 +1,5 @@
-<!-- resources/views/clients/index.blade.php -->
 @extends('layouts.app')
+
 
 @section('content')
 <div class="container">
@@ -16,7 +16,7 @@
             <tr>
                 <th>Nombre</th>
                 <th>Teléfono</th>
-                <th>Ciudad</th>
+                <th>Dirección</th>
                 <th>Fecha Registro</th>
                 <th>Acciones</th>
             </tr>
