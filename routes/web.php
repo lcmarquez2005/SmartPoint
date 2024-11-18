@@ -44,7 +44,7 @@ Route::put('/products/{product}', [ProductoController::class, 'update'])->middle
 Route::delete('/products/{product}', [ProductoController::class, 'destroy'])->middleware('auth')->name('products.destroy');
 
 //*CLIENTES 
-//redirecciona a crear producto unicarmente si esta autenticado
+//redirecciona solo si esta autenticado
 Route::get('/clients/', [ClienteController::class, 'index'])->middleware('auth')->name('clients.index');
 Route::get('/clients/create', [ClienteController::class, 'create'])->middleware('auth')->name('clients.create');
 Route::post('/clients/store', [ClienteController::class, 'store'])->middleware('auth')->name('clients.store');
@@ -53,6 +53,16 @@ Route::get('/clients/{clients}/edit', [ClienteController::class, 'edit'])->middl
 // Ruta para actualizar el producto
 Route::put('/clients/{clients}', [ClienteController::class, 'update'])->middleware('auth')->name('clients.update');
 Route::delete('/clients/{clients}', [ClienteController::class, 'destroy'])->middleware('auth')->name('clients.destroy');
+//*Proveedores 
+//redirecciona solo si esta autenticado
+Route::get('/proveedos/', [ClienteController::class, 'index'])->middleware('auth')->name('proveedors.index');
+Route::get('/proveedors/create', [ClienteController::class, 'create'])->middleware('auth')->name('proveedors.create');
+Route::post('/proveedors/store', [ClienteController::class, 'store'])->middleware('auth')->name('proveedors.store');
+// Ruta para mostrar el formulario de edición del producto
+Route::get('/proveedors/{proveedors}/edit', [ClienteController::class, 'edit'])->middleware('auth')->name('proveedors.edit');
+// Ruta para actualizar el producto
+Route::put('/proveedors/{proveedors}', [ClienteController::class, 'update'])->middleware('auth')->name('proveedors.update');
+Route::delete('/proveedors/{proveedors}', [ClienteController::class, 'destroy'])->middleware('auth')->name('proveedors.destroy');
 
 Route::get('/', function () {  
     return view('welcome');
