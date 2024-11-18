@@ -36,4 +36,9 @@ class Cliente extends Model
     ];
 
     // Si quieres definir valores por defecto o métodos adicionales, hazlo aquí
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'cliente_id');
+    }
+
 }

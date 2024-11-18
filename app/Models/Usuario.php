@@ -19,4 +19,12 @@ class Usuario extends Authenticatable
     {
         return $this->belongsTo(Empresa::class, 'empresa_id');
     }
+    public function surtidos()
+    {
+        return $this->hasMany(Surtido::class, 'usuario_id');
+    }
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'usuario_id');
+    }
 }
