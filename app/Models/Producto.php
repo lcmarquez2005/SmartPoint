@@ -25,7 +25,7 @@ class Producto extends Model
     public $timestamps = false;
 
 
-    public function productos()
+    public function detalles_ventas()
     {
         return $this->hasMany(Detalles_venta::class, 'cod_pro');
     }

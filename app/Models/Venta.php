@@ -25,9 +25,6 @@ class Venta extends Model
         'usuario_id',
     ];
 
-
-
-
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'usuario_id');
@@ -40,6 +37,4 @@ class Venta extends Model
     {
         return $this->hasMany(Detalles_venta::class, 'venta_id');
     }
-
-
 }
