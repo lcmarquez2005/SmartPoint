@@ -61,9 +61,9 @@ class ProductoController extends Controller
                 'nombre' => 'required|string|max:255',
                 'cantidad' => 'required|numeric',
                 'precio' => 'required|numeric',
-                'st_minimos' => 'nullable|numeric',
-                'st_maximos' => 'nullable|numeric',
-                'piezas' => 'nullable|integer',
+                'st_minimos' => 'nullable|numeric|min:0',
+                'st_maximos' => 'nullable|numeric|min:0',
+                'piezas' => 'nullable|integer|min:0',
             ]);
     
             // Buscar el productoo y actualizar los valores
