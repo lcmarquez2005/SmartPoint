@@ -76,19 +76,19 @@ class ProveedorController extends Controller
         $Proveedor->update($validatedData);
 
         // Redirigir después de la actualización
-        return redirect()->route('clients.index')->with('success', 'Proveedor actualizado correctamente');
+        return redirect()->route('proveedors.index')->with('success', 'Proveedor actualizado correctamente');
     }
 
         public function destroy($id)
         {
             // Buscar el Proveedor por su código
-            $client = Proveedor::where('id', $id)->firstOrFail();
+            $proveedor = Proveedor::where('id', $id)->firstOrFail();
             
             // Eliminar el Proveedor
-            $client->delete();
+            $proveedor->delete();
             
             // Redirigir de vuelta al listado de Proveedores con un mensaje
-            return redirect()->route('client.index')->with('success', 'Producto eliminado correctamente.');
+            return redirect()->route('proveedor.index')->with('success', 'Proveedor eliminado correctamente.');
 
             // @if (session('success'))
             //     <div class="alert alert-success">

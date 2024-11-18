@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ClienteController;
-
+use App\Http\Controllers\ProveedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,14 +55,14 @@ Route::put('/clients/{clients}', [ClienteController::class, 'update'])->middlewa
 Route::delete('/clients/{clients}', [ClienteController::class, 'destroy'])->middleware('auth')->name('clients.destroy');
 //*Proveedores 
 //redirecciona solo si esta autenticado
-Route::get('/proveedos/', [ClienteController::class, 'index'])->middleware('auth')->name('proveedors.index');
-Route::get('/proveedors/create', [ClienteController::class, 'create'])->middleware('auth')->name('proveedors.create');
-Route::post('/proveedors/store', [ClienteController::class, 'store'])->middleware('auth')->name('proveedors.store');
+Route::get('/proveedors/', [ProveedorController::class, 'index'])->middleware('auth')->name('proveedors.index');
+Route::get('/proveedors/create', [ProveedorController::class, 'create'])->middleware('auth')->name('proveedors.create');
+Route::post('/proveedors/store', [ProveedorController::class, 'store'])->middleware('auth')->name('proveedors.store');
 // Ruta para mostrar el formulario de edición del producto
-Route::get('/proveedors/{proveedors}/edit', [ClienteController::class, 'edit'])->middleware('auth')->name('proveedors.edit');
+Route::get('/proveedors/{proveedors}/edit', [ProveedorController::class, 'edit'])->middleware('auth')->name('proveedors.edit');
 // Ruta para actualizar el producto
-Route::put('/proveedors/{proveedors}', [ClienteController::class, 'update'])->middleware('auth')->name('proveedors.update');
-Route::delete('/proveedors/{proveedors}', [ClienteController::class, 'destroy'])->middleware('auth')->name('proveedors.destroy');
+Route::put('/proveedors/{proveedors}', [ProveedorController::class, 'update'])->middleware('auth')->name('proveedors.update');
+Route::delete('/proveedors/{proveedors}', [ProveedorController::class, 'destroy'])->middleware('auth')->name('proveedors.destroy');
 
 Route::get('/', function () {  
     return view('welcome');
