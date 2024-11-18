@@ -92,7 +92,7 @@ class ClienteController extends Controller
             $client->delete();
             
             // Redirigir de vuelta al listado de Clientes con un mensaje
-            return redirect()->route('client.index')->with('success', 'Producto eliminado correctamente.');
+            return redirect()->route('client.index')->with('success', 'Cliente eliminado correctamente.');
 
             // @if (session('success'))
             //     <div class="alert alert-success">
