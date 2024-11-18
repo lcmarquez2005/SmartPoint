@@ -19,7 +19,7 @@ class ClienteController extends Controller
             'nombre' => 'required|string|max:45',
             'apellido1' => 'required|string|max:45',
             'apellido2' => 'nullable|string|max:45',
-            'telefono' => 'required|string|max:100',
+            'telefono' => 'required|string|size:10',
             'calle' => 'nullable|string|max:100',
             'numero' => 'nullable|string|max:10',
             'colonia' => 'nullable|string|max:100',
@@ -58,13 +58,13 @@ class ClienteController extends Controller
         
     
     // Método para actualizar el Clienteo en la base de datos
-    public function update(Request $request, $cod_pro)
+    public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
             'nombre' => 'required|string|max:45',
             'apellido1' => 'required|string|max:45',
             'apellido2' => 'nullable|string|max:45',
-            'telefono' => 'required|string|max:100',
+            'telefono' => 'required|string|size:10',
             'calle' => 'nullable|string|max:100',
             'numero' => 'nullable|string|max:10',
             'colonia' => 'nullable|string|max:100',
@@ -76,7 +76,7 @@ class ClienteController extends Controller
         ]);
 
         // Buscar el Clienteo y actualizar los valores
-        $Cliente = Cliente::findOrFail($cod_pro);
+        $Cliente = Cliente::findOrFail($id);
         $Cliente->update($validatedData);
 
         // Redirigir después de la actualización
