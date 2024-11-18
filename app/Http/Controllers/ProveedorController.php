@@ -28,8 +28,12 @@ class ProveedorController extends Controller
             'deuda' => 'nullable|numeric|min:0',
         ]);
 
+        // Asigna el valor "México" si el campo 'pais' está vacío o es null
+        $validatedData['pais'] = $validatedData['pais'] ?? 'México';
+        
         // Aquí puedes crear el Proveedor
         Proveedor::create($validatedData);
+
 
         
         return redirect()->route('proveedors.index')->with('success', 'Proveedor creado exitosamente.');
@@ -51,7 +55,7 @@ class ProveedorController extends Controller
     public function edit($id)
     {
         $proveedor = Proveedor::where('id', $id)->firstOrFail();
-        return view('proveedors.edit', compact('proveedor'));
+        return view('proveedors.create', compact('proveedor'));
     }
         
     
@@ -88,7 +92,7 @@ class ProveedorController extends Controller
             $proveedor->delete();
             
             // Redirigir de vuelta al listado de Proveedores con un mensaje
-            return redirect()->route('proveedor.index')->with('success', 'Proveedor eliminado correctamente.');
+            return redirect()->route('proveedors.index')->with('success', 'Proveedor eliminado correctamente.');
 
             // @if (session('success'))
             //     <div class="alert alert-success">

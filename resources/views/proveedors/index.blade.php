@@ -2,14 +2,30 @@
 
 
 @section('content')
+<h1 class="">{{ $pageTitle}}</h1>
 <div class="container">
-    <h1>{{ $pageTitle}}</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
+
+
+    <!-- Controles superiores -->
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-2">
+            <input type="search" class="form-control" style="width: 300px;" placeholder="Buscar proveedor...">
+            <button class="btn btn-primary">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+        <div>
+            <a href="{{route('proveedors.create')}}" class="btn btn-success">
+                <i class="bi bi-plus-lg"></i> Agregar Proveedor
+            </a>
+        </div>
+    </div>
 
     <table class="table">
         <thead>
