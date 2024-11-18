@@ -53,6 +53,8 @@ Route::get('/clients/{clients}/edit', [ClienteController::class, 'edit'])->middl
 // Ruta para actualizar el producto
 Route::put('/clients/{clients}', [ClienteController::class, 'update'])->middleware('auth')->name('clients.update');
 Route::delete('/clients/{clients}', [ClienteController::class, 'destroy'])->middleware('auth')->name('clients.destroy');
+
+
 //*Proveedores 
 //redirecciona solo si esta autenticado
 Route::get('/proveedors/', [ProveedorController::class, 'index'])->middleware('auth')->name('proveedors.index');
