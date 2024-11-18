@@ -17,13 +17,16 @@
     <!-- Menu de navegacion -->
     <ul class="nav-menu">
         <li>
-            <a href=""><i class="bi bi-cart-plus"></i> Nueva Venta</a>
+            <a href=""><i class="bi bi-cart-plus"></i>Nueva Venta</a>
+        </li>
+        <li>
+            <a href=""><i class="bi bi-inbox"></i>Surtir</a>
         </li>
         <li>
             <a href="{{ route('products.index') }}"><i class="bi bi-box-seam"></i> Productos</a>
         </li>
         <li>
-            <a href=""><i class="bi bi-truck"></i> Proveedores</a>
+            <a href="{{ route('proveedors.index') }}"><i class="bi bi-truck"></i> Proveedores</a>
         </li>
         <li>
             <a href="{{ route('clients.index') }}"><i class="bi bi-people"></i> Clientes</a>
