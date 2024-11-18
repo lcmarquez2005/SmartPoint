@@ -2,14 +2,30 @@
 
 
 @section('content')
+<h1>{{ $pageTitle}}</h1>
 <div class="container">
-    <h1>{{ $pageTitle}}</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
+
+    <!-- Controles superiores -->
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-2">
+            <input type="search" class="form-control" style="width: 300px;" placeholder="Buscar cliente...">
+            <button class="btn btn-primary">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+        <div>
+            <a href="{{route('clients.create')}}" class="btn btn-success">
+                <i class="bi bi-plus-lg"></i> Agregar Cliente
+            </a>
+        </div>
+    </div>
+
 
     <table class="table">
         <thead>

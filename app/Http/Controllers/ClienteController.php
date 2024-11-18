@@ -30,6 +30,8 @@ class ClienteController extends Controller
             'deuda' => 'nullable|numeric|min:0',
         ]);
 
+        // Asigna el valor "México" si el campo 'pais' está vacío o es null
+        $validatedData['pais'] = $validatedData['pais'] ?? 'México';
         // Aquí puedes crear el Cliente
         Cliente::create($validatedData);
 
@@ -53,7 +55,7 @@ class ClienteController extends Controller
     public function edit($id)
     {
         $client = Cliente::where('id', $id)->firstOrFail();
-        return view('clients.edit', compact('client'));
+        return view('clients.create', compact('client'));
     }
         
     
