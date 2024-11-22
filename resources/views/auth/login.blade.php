@@ -24,12 +24,12 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div class="form-group">
-                            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username: (Unico)</label>
-                            <input id="username" type="text" name="username" required autofocus class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <div class="form-group py-2">
+                            <label for="username" class="mb-2">Username: (Unico)</label>
+                            <input id="username" type="text" name="username" required class="border rounded py-2 px-3">
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row py-2">
                             <label for="password" class="col-sm-2 col-form-label">Password:</label>
                             <div class="col-sm-10">
 
