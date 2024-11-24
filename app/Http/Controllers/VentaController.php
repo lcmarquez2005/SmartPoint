@@ -34,6 +34,22 @@ class VentaController extends Controller
         // Pasar el total y los productos a la vista
         return view('ventas.create', compact('clientes', 'productos','productosSelected', 'total'));
     }
+    public function show($id)
+    {
+        $venta = Venta::findOrFail($id); // Cargar la venta por id
+
+        // No es necesario hacer nada adicional para Lazy Loading, solo accede a las relaciones cuando las necesites
+    
+        // Asegúrate de que la venta existe
+        if (!$venta) {
+            return redirect()->route('ventas.index')->with('error', 'Venta no encontrada.');
+        }
+
+
+
+        return view('ventas.show', compact('venta'));
+    }
+
 
 
 

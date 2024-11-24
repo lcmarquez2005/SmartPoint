@@ -10,9 +10,12 @@
     
         <!-- Formulario para vaciar productos seleccionados (botón a la derecha) -->
         <form action="{{ route('vaciar.productos') }}" method="POST">
+            <a href="{{route('ventas.index')}}" class="btn btn-success">
+                <i class="bi bi-bag"></i> Ver Ventas
+            </a>
             @csrf
-            <button type="submit" class="btn btn-danger border btn-sm p-2">
-                <i class="bi bi-trash h5"></i> Vaciar Carrito
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash"></i> Vaciar Carrito
             </button>
         </form>
     </div>
@@ -119,16 +122,19 @@
         @csrf
         <!-- Información del cliente -->
         {{-- @NahumAgp: aqui deberiamos generar el formulario  del cliente cuando seleccione agregar cliente --}}
-        <div class="col-md-6 form-group">
-            <h3 for="cliente_id">Cliente</h3>
-            <select id="cliente_id" name="cliente_id" class="form-control" onchange="toggleNewClienteInput(this)">
+        <div class="col-md-6 card">
+            <div class="card-body">
 
-                <option value="">Seleccione un cliente</option>
-                @foreach ($clientes as $cliente)
-                    <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
-                @endforeach
-                <option value="0">Agregar Nuevo Cliente + </option>
-            </select>
+                <h3 for="cliente_id">Cliente</h3>
+                <select id="cliente_id" name="cliente_id" class="form-control" onchange="toggleNewClienteInput(this)">
+    
+                    <option value="">Seleccione un cliente</option>
+                    @foreach ($clientes as $cliente)
+                        <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                    @endforeach
+                    <option value="0">Agregar Nuevo Cliente + </option>
+                </select>
+            </div>
         </div>
 
         <!-- Información de pago -->
@@ -156,8 +162,8 @@
                             <label class="form-label">Método de pago:</label>
                             <select name="metodo_pago" class="form-select form-select-sm">
                                 <option value="">Seleccione un Metodo Pago</option>
-                                <option value="efectivo">Efectivo</option>
-                                <option value="tarjeta">Tarjeta</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Tarjeta">Tarjeta</option>
                             </select>
                         </div>
                     </div>
@@ -169,12 +175,12 @@
 
                     <!-- Botones de acción -->
                     <div class="d-flex justify-content-end gap-2 mt-3">
-                        <button type="submit" class="btn btn-success btn-sm">
+                        <button type="submit" class="btn btn-success">
                             <i class="bi bi-check-circle"></i> Finalizar Venta
                         </button>
-                        <button class="btn btn-danger btn-sm">
+                        {{-- <a href="{{route('products.index')}}" class="btn btn-danger btn-sm">
                             <i class="bi bi-x-circle"></i> Cancelar Venta
-                        </button>
+                        </a> --}}
                     </div>
                 </div>
             </div>

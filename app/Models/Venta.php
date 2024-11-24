@@ -24,6 +24,9 @@ class Venta extends Model
         'cliente_id',
         'usuario_id',
     ];
+    protected $casts = [
+        'fecha' => 'datetime',
+    ];
 
     public function usuario()
     {
