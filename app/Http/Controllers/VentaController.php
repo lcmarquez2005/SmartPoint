@@ -21,7 +21,16 @@ class VentaController extends Controller
     {
         $clientes = Cliente::all();
         $productos = Producto::all();
-        return view('ventas.create', compact('clientes', 'productos'));
+
+        // Obtener los productos seleccionados de la sesión
+        $productosSelected = collect(session('productosSelected', []));
+
+
+        // Recalcular el total
+        $total = $this->recalcularTotal();
+
+        // Pasar el total y los productos a la vista
+        return view('ventas.create', compact('clientes', 'productos','productosSelected', 'total'));
     }
 
     public function store(Request $request)
@@ -84,6 +93,7 @@ class VentaController extends Controller
     }
     public function addProduct(Request $request)
     {
+        // Validar los datos recibidos
         $validatedData = $request->validate([
             'cod_pro' => 'required|string',
             'cantidad' => 'required|integer|min:1',
@@ -91,35 +101,38 @@ class VentaController extends Controller
     
         // Recuperar los productos seleccionados como una colección
         $productosSelected = collect(session('productosSelected', []));
-    
+        
         // Obtener el producto por código de producto
         $producto = Producto::where('cod_pro', $validatedData['cod_pro'])->first();
     
-        // Verifica si el producto existe
+        // Verificar si el producto existe en la base de datos
         if (!$producto) {
             return redirect()->back()->withErrors(['error' => 'Producto no encontrado.']);
         }
     
-        // Verifica si ya existe en los productos seleccionados
-        $productoExistente = $productosSelected->firstWhere('cod_pro', $validatedData['cod_pro']);
-    
-        if ($productoExistente) {
-            // Si el producto ya está en la lista, suma la cantidad
-            $productosSelected = $productosSelected->map(function ($prod) use ($validatedData) {
-                if ($prod->cod_pro === $validatedData['cod_pro']) {
-                    $prod->cantidad += $validatedData['cantidad'];
-                }
-                return $prod;
-            });
+        // Verificar si ya existe en la colección de productos seleccionados (usando cod_pro como clave)
+        if ($productosSelected->has($validatedData['cod_pro'])) {
+            // Si el producto ya está en la lista, actualizamos su cantidad
+            $productoExistente = $productosSelected->get($validatedData['cod_pro']);
+            
+            // Verificamos si la cantidad solicitada no supera el stock disponible
+            if ($productoExistente->cantidad + $validatedData['cantidad'] > $producto->cantidad) {
+                return redirect()->back()->withErrors(['error' => 'No hay suficiente stock disponible.']);
+            }
+            
+            // Actualizar la cantidad del producto existente
+            $productoExistente->cantidad += $validatedData['cantidad'];
         } else {
-            // Si no está, verificar el stock antes de agregarlo
+            // Si el producto no está en la lista, verificar si hay suficiente stock
             if ($producto->cantidad < $validatedData['cantidad']) {
                 return redirect()->back()->withErrors(['error' => 'No hay suficiente stock disponible.']);
             }
     
             // Establece la cantidad seleccionada al objeto Producto
             $producto->cantidad = $validatedData['cantidad'];
-            $productosSelected->push($producto);
+    
+            // Añadir el nuevo producto a la colección, usando cod_pro como clave
+            $productosSelected->put($producto->cod_pro, $producto);
         }
     
         // Guardar los productos seleccionados en la sesión
@@ -129,9 +142,13 @@ class VentaController extends Controller
         $clientes = Cliente::all();
         $productos = Producto::all();
     
+        // Recalcular el total
+        $total = $this->recalcularTotal();
+    
         // Devolver la vista con los productos seleccionados
-        return view('ventas.create', compact('clientes', 'productos', 'productosSelected'));
+        return view('ventas.create', compact('clientes', 'productos', 'productosSelected', 'total'));
     }
+    
 
     public function removeProduct($cod_pro)
     {
@@ -146,9 +163,47 @@ class VentaController extends Controller
         // Actualizar la sesión con la colección filtrada
         session(['productosSelected' => $productosFiltered]);
 
+        $total = $this->recalcularTotal();
+
         // Redirigir con un mensaje de éxito
-        return redirect()->back()->with('success', 'Producto eliminado exitosamente.');
+        return redirect()->back()->with('success', 'Producto eliminado exitosamente.')
+        ->with('total', $total);
     }
+
+    
+
+
+
+    public function vaciarProductos()
+    {
+        // Vaciar todos los productos seleccionados de la sesión
+        session()->forget('productosSelected');
+        
+        // Recalcular el total
+        $total = $this->recalcularTotal();
+
+        //devolver con el mensaje a la vista y con el nuevo total
+        return redirect()->back()
+        ->with('success', 'Todos los productos seleccionados han sido eliminados.')
+        ->with('total', $total);  // Pasar el total calculado a la vista
+    }
+
+    public function recalcularTotal()
+    {
+        // Recuperar los productos seleccionados de la sesión
+        $productosSelected = collect(session('productosSelected', []));
+
+        // Calcular el total
+        $total = $productosSelected->sum(function ($producto) {
+            return $producto->precio * $producto->cantidad;
+        });
+
+        // Guardar el total en la sesión o devolverlo como respuesta
+        session(['total' => $total]);
+
+        return $total;  // Si lo necesitas como respuesta directa
+    }
+
 
     
     

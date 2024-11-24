@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/ventas/create', [VentaController::class, 'addProduct'])->name('detalle.create');
     Route::delete('/ventas/producto/{cod_pro}', [VentaController::class, 'removeProduct'])->name('producto.remove');
+    //Productos de la session es decir productos que estan por ser vendidos pero no han sido almacenados en la db los cambios
+    Route::post('/vaciar-productos', [VentaController::class, 'vaciarProductos'])->name('vaciar.productos');
 
 
 });
