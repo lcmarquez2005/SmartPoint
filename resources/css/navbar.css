@@ -86,3 +86,21 @@
 }
 
 /* Producto html */
+
+
+.select2-container {
+    width: 100% !important; /* Asegura que el select ocupe el 100% del espacio disponible */
+}
+
+.select2-selection {
+    height: 31.1px !important; /* Ajusta la altura del select */
+    font-size: 16px !important; /* Cambia el tamaño de la fuente */
+}
+
+.select2-selection__rendered {
+    line-height: 32px !important; /* Ajusta la línea de altura para el texto */
+}
+
+.select2-dropdown {
+    font-size: 16px !important; /* Aumenta el tamaño de la fuente del dropdown */
+}
