@@ -8,12 +8,14 @@ use App\Models\Producto;
 use App\Models\Cliente;
 use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
+use PhpParser\Node\NullableType;
+use Illuminate\Support\Facades\DB;
 
 class VentaController extends Controller
 {
     public function index()
     {
-        $ventas = Venta::with('cliente', 'detalles.producto')->get();
+        $ventas = Venta::all();
         return view('ventas.index', compact('ventas'));
     }
 
@@ -33,8 +35,78 @@ class VentaController extends Controller
         return view('ventas.create', compact('clientes', 'productos','productosSelected', 'total'));
     }
 
+
+
     public function store(Request $request)
     {
+        // Validación y procesamiento de la venta
+        $validatedData = self::procesarVenta($request);
+        $user = Auth::user();
+    
+        // Empezamos una transacción para asegurarnos de que todo se guarde correctamente
+        DB::beginTransaction();
+    
+        try {
+            // Calculamos el total de la venta
+            $total = $this->recalcularTotal();
+    
+            // Crear la venta
+            $venta = Venta::create([
+                'metodo_pago' => $validatedData['metodo_pago'],
+                'cliente_id' => $validatedData['cliente_id'],
+                'usuario_id' => $user->id,
+                'total' => $total, // Se calculará
+            ]);
+    
+            // Procesar los productos
+            foreach ($validatedData['productos'] as $productoDetalle) {
+                // Obtener el producto de la base de datos
+                $producto = Producto::where('cod_pro', $productoDetalle['cod_pro'])->first();
+    
+                // Verificar si el producto existe y si hay suficiente stock
+                if ($producto) {
+                    if ($producto->cantidad >= $productoDetalle['cantidad']) {
+                        // Crear el detalle de la venta
+                        Detalles_venta::create([
+                            'cod_pro' => $productoDetalle['cod_pro'],
+                            'venta_id' => $venta->id,
+                            'cantidad' => $productoDetalle['cantidad'],
+                        ]);
+    
+                        // Actualizar el stock del producto
+                        $producto->cantidad -= $productoDetalle['cantidad']; // Reducir el stock
+                        $producto->save(); // Guardar los cambios
+                    } else {
+                        // Si no hay suficiente stock, lanzamos un error
+                        throw new \Exception("No hay suficiente stock para el producto: " . $producto->nombre);
+                    }
+                } else {
+                    // Si el producto no existe, lanzamos un error
+                    throw new \Exception("Producto no encontrado: " . $productoDetalle['cod_pro']);
+                }
+            }
+    
+            // Si todo es exitoso, confirmamos la transacción
+            DB::commit();
+    
+            // Vaciar los productos seleccionados de la sesión
+            $this->vaciarProductos();
+    
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('ventas.index')->with('success', 'Venta creada exitosamente.');
+    
+        } catch (\Exception $e) {
+            DB::rollBack();// Si ocurre un error, revertimos la transacción
+    
+            // Devolver mensaje de error
+            return redirect()->route('ventas.index')->with('error', 'Error al crear la venta: ' . $e->getMessage());
+        }
+    }
+    
+
+    public function procesarVenta(Request $request)
+    {
+
         $validatedData = $request->validate([
             'metodo_pago' => 'required|string|max:45',
             'cliente_id' => 'required|exists:clientes,id',
@@ -43,59 +115,20 @@ class VentaController extends Controller
             'productos.*.cantidad' => 'required|numeric|min:1',
         ]);
 
-        $mensaje = self::procesarVenta($request);
-
-        $user = Auth::user();
-
-
-        // Crear la venta
-        $venta = Venta::create([
-            'metodo_pago' => $validatedData['metodo_pago'],
-            'cliente_id' => $validatedData['cliente_id'],
-            'usuario_id' => $user->id,
-            'total' => 0, // Se calculará
-        ]);
-
-        $total = 0;
-
-        // Agregar detalles de la venta
-        foreach ($validatedData['productos'] as $productoDetalle) {
-            $producto = Producto::where('cod_pro', $productoDetalle['cod_pro'])->first();
-            $subtotal = $producto->precio * $productoDetalle['cantidad'];
-            $total += $subtotal;
-
-            Detalles_venta::create([
-                'cod_pro' => $productoDetalle['cod_pro'],
-                'venta_id' => $venta->id,
-                'cantidad' => $productoDetalle['cantidad'],
-            ]);
+        // Validación personalizada para asegurarse de que la cantidad no exceda el inventario
+        foreach ($validatedData['productos'] as $producto) {
+            $productoEnStock = Producto::where('cod_pro', $producto['cod_pro'])->first();
+            if ($productoEnStock && $producto['cantidad'] > $productoEnStock->cantidad) {
+                return redirect()->back()->withErrors(['productos' => 'La cantidad solicitada para el producto ' . $producto['cod_pro'] . ' excede el stock disponible.']);
+            }
         }
 
-        // Actualizar el total de la venta
-        $venta->update(['total' => $total]);
-
-        return redirect()->route('ventas.index')->with('success', 'Venta creada exitosamente.');
-    }
-
-    public function procesarVenta(Request $request)
-    {
-        dd($request->all());
-        $request->validate([
-            'productos.*.cod_pro' => 'required|string',
-            'productos.*.cantidad' => 'required|integer|min:1',
-        ]);
-        
-        $productos = collect(session('productosSelected', [])); // Obtiene todos los productos
-        $productos->validate([
-
-        ]);
-
-        // Procesar los datos (por ejemplo, guardarlos en la base de datos)
-        Detalles_venta::create($productos);
 
         // Redirigir o responder
-        return "Datos procesados Correctamente";
+        return $validatedData;
     }
+
+
     public function addProduct(Request $request)
     {
         // Validar los datos recibidos
@@ -110,8 +143,7 @@ class VentaController extends Controller
         if($this->validarProducto($validatedData, $productosSelected) != null) {
             return $this->validarProducto($validatedData, $productosSelected);
         };
-        
-            
+                    
         // Guardar los productos seleccionados en la sesión
         session(['productosSelected' => $productosSelected]);
     
