@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\Venta;
 use App\Models\Detalles_venta;
 use App\Models\Producto;
@@ -35,22 +35,24 @@ class VentaController extends Controller
 
     public function store(Request $request)
     {
-        $mensaje = self::procesarVenta($request);
-
         $validatedData = $request->validate([
-            'metodo_pago' => 'nullable|string|max:45',
+            'metodo_pago' => 'required|string|max:45',
             'cliente_id' => 'required|exists:clientes,id',
-            'usuario_id' => 'required|exists:usuarios,id',
             'productos' => 'required|array',
             'productos.*.cod_pro' => 'required|exists:productos,cod_pro',
             'productos.*.cantidad' => 'required|numeric|min:1',
         ]);
 
+        $mensaje = self::procesarVenta($request);
+
+        $user = Auth::user();
+
+
         // Crear la venta
         $venta = Venta::create([
             'metodo_pago' => $validatedData['metodo_pago'],
             'cliente_id' => $validatedData['cliente_id'],
-            'usuario_id' => $validatedData['usuario_id'],
+            'usuario_id' => $user->id,
             'total' => 0, // Se calculará
         ]);
 
@@ -77,13 +79,16 @@ class VentaController extends Controller
 
     public function procesarVenta(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'productos.*.cod_pro' => 'required|string',
             'productos.*.cantidad' => 'required|integer|min:1',
         ]);
         
-        $productos = $request->input('productos'); // Obtiene todos los productos
-        
+        $productos = collect(session('productosSelected', [])); // Obtiene todos los productos
+        $productos->validate([
+
+        ]);
 
         // Procesar los datos (por ejemplo, guardarlos en la base de datos)
         Detalles_venta::create($productos);
@@ -96,15 +101,37 @@ class VentaController extends Controller
         // Validar los datos recibidos
         $validatedData = $request->validate([
             'cod_pro' => 'required|string',
-            'cantidad' => 'required|integer|min:1',
+            'cantidad' => 'required|numeric|min:1',
         ]);
     
         // Recuperar los productos seleccionados como una colección
         $productosSelected = collect(session('productosSelected', []));
+
+        if($this->validarProducto($validatedData, $productosSelected) != null) {
+            return $this->validarProducto($validatedData, $productosSelected);
+        };
         
+            
+        // Guardar los productos seleccionados en la sesión
+        session(['productosSelected' => $productosSelected]);
+    
+        // Obtener todos los clientes y productos para pasarlos a la vista
+        $clientes = Cliente::all();
+        $productos = Producto::all();
+    
+        // Recalcular el total
+        $total = $this->recalcularTotal();
+    
+        // Devolver la vista con los productos seleccionados
+        return view('ventas.create', compact('clientes', 'productos', 'productosSelected', 'total'));
+    }
+
+
+    public function validarProducto($validatedData, $productosSelected) {
         // Obtener el producto por código de producto
         $producto = Producto::where('cod_pro', $validatedData['cod_pro'])->first();
-    
+
+
         // Verificar si el producto existe en la base de datos
         if (!$producto) {
             return redirect()->back()->withErrors(['error' => 'Producto no encontrado.']);
@@ -134,19 +161,7 @@ class VentaController extends Controller
             // Añadir el nuevo producto a la colección, usando cod_pro como clave
             $productosSelected->put($producto->cod_pro, $producto);
         }
-    
-        // Guardar los productos seleccionados en la sesión
-        session(['productosSelected' => $productosSelected]);
-    
-        // Obtener todos los clientes y productos para pasarlos a la vista
-        $clientes = Cliente::all();
-        $productos = Producto::all();
-    
-        // Recalcular el total
-        $total = $this->recalcularTotal();
-    
-        // Devolver la vista con los productos seleccionados
-        return view('ventas.create', compact('clientes', 'productos', 'productosSelected', 'total'));
+
     }
     
 

@@ -115,7 +115,8 @@
         </table>
         
     </div>
-    <div class="row">
+    <form action="{{route('ventas.store')}}" method="POST" class="row">
+        @csrf
         <!-- Información del cliente -->
         {{-- @NahumAgp: aqui deberiamos generar el formulario  del cliente cuando seleccione agregar cliente --}}
         <div class="col-md-6 form-group">
@@ -141,7 +142,7 @@
                     <div class="row g-2">
                         <div class="col-md-6">
                             <label class="form-label">Total A Pagar:</label>
-                            <input type="number" class="form-control form-control-sm">
+                            <input type="number" class="form-control form-control-sm" value="{{$total }}" disabled>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Entrada:</label>
@@ -153,15 +154,22 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Método de pago:</label>
-                            <select class="form-select form-select-sm">
+                            <select name="metodo_pago" class="form-select form-select-sm">
+                                <option value="">Seleccione un Metodo Pago</option>
                                 <option value="efectivo">Efectivo</option>
                                 <option value="tarjeta">Tarjeta</option>
                             </select>
                         </div>
                     </div>
+
+                    @foreach (session('productosSelected', []) as $producto)
+                        <input type="hidden" name="productos[{{ $producto->cod_pro }}][cod_pro]" value="{{ $producto->cod_pro }}">
+                        <input type="hidden" name="productos[{{ $producto->cod_pro }}][cantidad]" value="{{ $producto->cantidad }}">
+                     @endforeach
+
                     <!-- Botones de acción -->
                     <div class="d-flex justify-content-end gap-2 mt-3">
-                        <button class="btn btn-success btn-sm">
+                        <button type="submit" class="btn btn-success btn-sm">
                             <i class="bi bi-check-circle"></i> Finalizar Venta
                         </button>
                         <button class="btn btn-danger btn-sm">
@@ -171,7 +179,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 @endsection
