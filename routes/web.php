@@ -1,71 +1,53 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\VentaController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
+| These routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 */
+
+// ** Rutas de autenticación **
 Route::get('/login', [AuthController::class, 'create'])->name('login');
 Route::post('/login', [AuthController::class, 'store']);
 Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
-
-
-Route::get('/', [ProductoController::class, 'index'])->middleware('auth')->name('products.index');//vista de inicio si esta autenticado
-
-
-
-
+// Registro de usuarios (opcional, solo si es necesario)
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+
+// ** Rutas protegidas por autenticación **
+Route::middleware('auth')->group(function () {
+    // Página de inicio
+    Route::get('/', [ProductoController::class, 'index'])->name('products.index');
+
+    // ** Productos **
+    Route::resource('products', ProductoController::class);
+
+    // ** Clientes **
+    Route::resource('clients', ClienteController::class);
+
+    // ** Proveedores **
+    Route::resource('proveedors', ProveedorController::class);
+
+    // ** Ventas **
+    Route::resource('ventas', VentaController::class);
+
+    Route::post('/ventas/create', [VentaController::class, 'addProduct'])->name('detalle.create');
+    Route::delete('/ventas/producto/{cod_pro}', [VentaController::class, 'removeProduct'])->name('producto.remove');
 
 
-//*PRODUCTOS 
-//redirecciona a crear producto unicarmente si esta autenticado
-Route::get('/products/', [ProductoController::class, 'index'])->middleware('auth')->name('products.index');
-Route::get('/products/create', [ProductoController::class, 'create'])->middleware('auth')->name('products.create');
-Route::post('/products/store', [ProductoController::class, 'store'])->middleware('auth')->name('products.store');
-// Ruta para mostrar el formulario de edición del producto
-Route::get('/products/{product}/edit', [ProductoController::class, 'edit'])->middleware('auth')->name('products.edit');
-// Ruta para actualizar el producto
-Route::put('/products/{product}', [ProductoController::class, 'update'])->middleware('auth')->name('products.update');
-Route::delete('/products/{product}', [ProductoController::class, 'destroy'])->middleware('auth')->name('products.destroy');
+});
 
-//*CLIENTES 
-//redirecciona solo si esta autenticado
-Route::get('/clients/', [ClienteController::class, 'index'])->middleware('auth')->name('clients.index');
-Route::get('/clients/create', [ClienteController::class, 'create'])->middleware('auth')->name('clients.create');
-Route::post('/clients/store', [ClienteController::class, 'store'])->middleware('auth')->name('clients.store');
-// Ruta para mostrar el formulario de edición del producto
-Route::get('/clients/{clients}/edit', [ClienteController::class, 'edit'])->middleware('auth')->name('clients.edit');
-// Ruta para actualizar el producto
-Route::put('/clients/{clients}', [ClienteController::class, 'update'])->middleware('auth')->name('clients.update');
-Route::delete('/clients/{clients}', [ClienteController::class, 'destroy'])->middleware('auth')->name('clients.destroy');
-
-
-//*Proveedores 
-//redirecciona solo si esta autenticado
-Route::get('/proveedors/', [ProveedorController::class, 'index'])->middleware('auth')->name('proveedors.index');
-Route::get('/proveedors/create', [ProveedorController::class, 'create'])->middleware('auth')->name('proveedors.create');
-Route::post('/proveedors/store', [ProveedorController::class, 'store'])->middleware('auth')->name('proveedors.store');
-// Ruta para mostrar el formulario de edición del producto
-Route::get('/proveedors/{proveedors}/edit', [ProveedorController::class, 'edit'])->middleware('auth')->name('proveedors.edit');
-// Ruta para actualizar el producto
-Route::put('/proveedors/{proveedors}', [ProveedorController::class, 'update'])->middleware('auth')->name('proveedors.update');
-Route::delete('/proveedors/{proveedors}', [ProveedorController::class, 'destroy'])->middleware('auth')->name('proveedors.destroy');
-
-Route::get('/', function () {  
+// ** Ruta de bienvenida (para usuarios no autenticados) **
+Route::get('/', function () {
     return view('welcome');
 });
