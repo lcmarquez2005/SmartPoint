@@ -17,7 +17,7 @@
     <!-- Menu de navegacion -->
     <ul class="nav-menu">
         <li>
-            <a href=""><i class="bi bi-cart-plus"></i>Nueva Venta</a>
+            <a href="{{ route('ventas.create') }}"><i class="bi bi-cart-plus"></i>Nueva Venta</a>
         </li>
         <li>
             <a href=""><i class="bi bi-inbox"></i>Surtir</a>
