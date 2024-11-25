@@ -20,8 +20,8 @@
             @method('PUT') <!-- Para indicar que esta es una solicitud de actualización -->
 
             <div class="form-group">
-                <label for="cod_pro">Código del Producto:</label>
-                <input type="text" name="cod_pro" class="form-control" value="{{ old('cod_pro', $product->cod_pro) }}" required>
+                <label hidden for="cod_pro">Código del Producto:</label>
+                <input type="text" name="cod_pro" class="form-control" value="{{ old('cod_pro', $product->cod_pro) }}" required hidden>
             </div>
 
             <div class="form-group">

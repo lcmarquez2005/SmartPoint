@@ -138,7 +138,7 @@
             
                             <option value="">Seleccione un cliente +</option>
                             @foreach ($clientes as $cliente)
-                                <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                                <option value="{{ $cliente->id }}">{{ $cliente->nombre }} {{ $cliente->apellido1 }} {{ $cliente->apellido2 }}</option>
                             @endforeach
                             <option value="0">Agregar Nuevo Cliente + </option>
                         </select>
