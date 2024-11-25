@@ -122,18 +122,29 @@
         @csrf
         <!-- Información del cliente -->
         {{-- @NahumAgp: aqui deberiamos generar el formulario  del cliente cuando seleccione agregar cliente --}}
-        <div class="col-md-6 card">
-            <div class="card-body">
+        <div class="col-md-6">
+            <div class="card">
 
-                <h3 for="cliente_id">Cliente</h3>
-                <select id="cliente_id" name="cliente_id" class="form-control" onchange="toggleNewClienteInput(this)">
+                <div class="card-body row g-2">
     
-                    <option value="">Seleccione un cliente</option>
-                    @foreach ($clientes as $cliente)
-                        <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
-                    @endforeach
-                    <option value="0">Agregar Nuevo Cliente + </option>
-                </select>
+    
+                    <div class="col-md-3">
+    
+                        <h3 for="cliente_id">Agregar Cliente</h3>
+                    </div>
+                    <div class="col-md-9">
+    
+                        <select id="cliente_id" name="cliente_id" class="form-control" onchange="toggleNewClienteInput(this)">
+            
+                            <option value="">Seleccione un cliente +</option>
+                            @foreach ($clientes as $cliente)
+                                <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                            @endforeach
+                            <option value="0">Agregar Nuevo Cliente + </option>
+                        </select>
+                    </div>
+    
+                </div>
             </div>
         </div>
 
