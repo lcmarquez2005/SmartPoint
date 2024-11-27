@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`clientes` (
   `nombre` VARCHAR(45) NOT NULL,
   `apellido1` VARCHAR(45) NOT NULL,
   `apellido2` VARCHAR(45) NULL,
-  `telefono` VARCHAR(100) NOT NULL,
+  `telefono` VARCHAR(11) NOT NULL,
   `fecha_registro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   `deuda` DECIMAL(10,2) NULL,
   `calle` VARCHAR(100) NULL DEFAULT NULL,
@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS `SmartPoint`.`proveedores` ;
 CREATE TABLE IF NOT EXISTS `SmartPoint`.`proveedores` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
-  `telefono` VARCHAR(100) NOT NULL,
+  `telefono` VARCHAR(11) NOT NULL,
   `fecha_registro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   `deuda` DECIMAL(10,2) NULL,
   `calle` VARCHAR(100) NULL,
@@ -206,6 +206,20 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
+-- Table `SmartPoint`.`devoluciones`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SmartPoint`.`devoluciones` ;
+
+CREATE TABLE IF NOT EXISTS `SmartPoint`.`devoluciones` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` VARCHAR(45) NULL,
+  `fecha` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `SmartPoint`.`detalles_ventas`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `SmartPoint`.`detalles_ventas` ;
@@ -214,9 +228,11 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`detalles_ventas` (
   `cod_pro` VARCHAR(50) NOT NULL,
   `venta_id` INT(11) NOT NULL,
   `cantidad` DECIMAL(10,2) NOT NULL,
+  `devolucion_id` INT(11) NULL,
   INDEX `fk_detalle_ventas1_idx` (`venta_id` ASC) VISIBLE,
   INDEX `fk_detalles_productos1_idx` (`cod_pro` ASC) VISIBLE,
   PRIMARY KEY (`cod_pro`, `venta_id`),
+  INDEX `fk_detalles_ventas_devoluciones1_idx` (`devolucion_id` ASC) VISIBLE,
   CONSTRAINT `fk_detalle_ventas1`
     FOREIGN KEY (`venta_id`)
     REFERENCES `SmartPoint`.`ventas` (`id`)
@@ -225,6 +241,11 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`detalles_ventas` (
   CONSTRAINT `fk_detalles_productos1`
     FOREIGN KEY (`cod_pro`)
     REFERENCES `SmartPoint`.`productos` (`cod_pro`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_detalles_ventas_devoluciones1`
+    FOREIGN KEY (`devolucion_id`)
+    REFERENCES `SmartPoint`.`devoluciones` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -314,25 +335,6 @@ CREATE TABLE IF NOT EXISTS `SmartPoint`.`transacciones` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 21
 DEFAULT CHARACTER SET = utf8mb4;
-
-
--- -----------------------------------------------------
--- Table `SmartPoint`.`devoluciones`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `SmartPoint`.`devoluciones` ;
-
-CREATE TABLE IF NOT EXISTS `SmartPoint`.`devoluciones` (
-  `cod_pro` VARCHAR(50) NOT NULL,
-  `venta_id` INT(11) NOT NULL,
-  `descripcion` VARCHAR(45) NULL,
-  `fecha` VARCHAR(45) NULL,
-  PRIMARY KEY (`cod_pro`, `venta_id`),
-  CONSTRAINT `fk_Devoluciones_detalles_ventas1`
-    FOREIGN KEY (`cod_pro` , `venta_id`)
-    REFERENCES `SmartPoint`.`detalles_ventas` (`cod_pro` , `venta_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
