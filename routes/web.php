@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\VentaController;
+use App\Http\Controllers\SurtidoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,13 +42,17 @@ Route::middleware('auth')->group(function () {
     // ** Ventas **
     Route::resource('ventas', VentaController::class);
 
+    //** SurtidoController **
+    Route::resource('surtir', SurtidoController::class);
+
+
     Route::post('/ventas/create', [VentaController::class, 'addProduct'])->name('detalle.create');
     Route::delete('/ventas/producto/{cod_pro}', [VentaController::class, 'removeProduct'])->name('producto.remove');
     //Productos de la session es decir productos que estan por ser vendidos pero no han sido almacenados en la db los cambios
     Route::post('/vaciar-productos', [VentaController::class, 'vaciarProductos'])->name('vaciar.productos');
 
-
 });
+
 
 // ** Ruta de bienvenida (para usuarios no autenticados) **
 Route::get('/', function () {

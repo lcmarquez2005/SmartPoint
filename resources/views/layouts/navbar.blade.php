@@ -5,11 +5,11 @@
         <img src="{{ asset('imagenes/icono.jpg') }}" alt="User Profile">
         <div>
             @if(Auth::check())
-                {{ Auth::user()->username }}
-                <!-- Authentication -->
+            {{ Auth::user()->username }}
+            <!-- Authentication -->
 
             @else
-                Invitado
+            Invitado
             @endif
         </div>
     </div>
@@ -20,7 +20,7 @@
             <a href="{{ route('ventas.create') }}"><i class="bi bi-cart-plus"></i>Nueva Venta</a>
         </li>
         <li>
-            <a href=""><i class="bi bi-inbox"></i>Surtir</a>
+            <a href="{{ route('surtir.index') }}"><i class="bi bi-inbox"></i>Surtir</a>
         </li>
         <li>
             <a href="{{ route('products.index') }}"><i class="bi bi-box-seam"></i> Productos</a>
@@ -38,7 +38,7 @@
             <a href=""><i class="bi bi-gear"></i> Gestión</a>
         </li>
         <li>
-            <a href="""><i class="bi bi-sliders"></i> Configuración</a>
+            <a href="""><i class=" bi bi-sliders"></i> Configuración</a>
         </li>
     </ul>
 </div>
