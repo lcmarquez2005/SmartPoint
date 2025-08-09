@@ -11,7 +11,7 @@
         <!-- Formulario para vaciar productos seleccionados (botón a la derecha) -->
         <form action="{{ route('vaciar.productos') }}" method="POST">
             <a href="{{route('ventas.index')}}" class="btn btn-success">
-                <i class="bi bi-bag"></i> Ver Ventas
+                <i class="bi bi-bag"></i> Ver Surtidos
             </a>
             @csrf
             <button type="submit" class="btn btn-danger">
@@ -19,6 +19,10 @@
             </button>
         </form>
     </div>
+    <h4>Crea un Producto:</h4>
+    <x-product-form :action="route('products.store')" :type="4" />
+
+
 
     <!-- Formulario de producto -->
     <div class="card mb-4">
@@ -142,7 +146,7 @@
 
                             <option value="">Seleccione un Proveedor +</option>
                             @foreach ($proveedores as $proveedor)
-                            <option value="{{ $proveedor->id }}">{{ $proveedor->nombre }} {{ $proveedor->telefono }}
+                            <option value="{{ $proveedor->id }}">{{ $proveedor->nombre }} - {{ $proveedor->telefono }}
                             </option>
                             @endforeach
                             <option value="0">Agregar Nuevo Proveedor + </option>

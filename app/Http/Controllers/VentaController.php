@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Venta;
 use App\Models\Detalles_venta;
@@ -8,7 +9,6 @@ use App\Models\Producto;
 use App\Models\Cliente;
 use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
-use PhpParser\Node\NullableType;
 use Illuminate\Support\Facades\DB;
 
 class VentaController extends Controller
@@ -32,14 +32,14 @@ class VentaController extends Controller
         $total = $this->recalcularTotal();
 
         // Pasar el total y los productos a la vista
-        return view('ventas.create', compact('clientes', 'productos','productosSelected', 'total'));
+        return view('ventas.create', compact('clientes', 'productos', 'productosSelected', 'total'));
     }
     public function show($id)
     {
         $venta = Venta::findOrFail($id); // Cargar la venta por id
 
         // No es necesario hacer nada adicional para Lazy Loading, solo accede a las relaciones cuando las necesites
-    
+
         // Asegúrate de que la venta existe
         if (!$venta) {
             return redirect()->route('ventas.index')->with('error', 'Venta no encontrada.');
@@ -58,14 +58,14 @@ class VentaController extends Controller
         // Validación y procesamiento de la venta
         $validatedData = self::procesarVenta($request);
         $user = Auth::user();
-    
+
         // Empezamos una transacción para asegurarnos de que todo se guarde correctamente
         DB::beginTransaction();
-    
+
         try {
             // Calculamos el total de la venta
             $total = $this->recalcularTotal();
-    
+
             // Crear la venta
             $venta = Venta::create([
                 'metodo_pago' => $validatedData['metodo_pago'],
@@ -73,12 +73,12 @@ class VentaController extends Controller
                 'usuario_id' => $user->id,
                 'total' => $total, // Se calculará
             ]);
-    
+
             // Procesar los productos
             foreach ($validatedData['productos'] as $productoDetalle) {
                 // Obtener el producto de la base de datos
                 $producto = Producto::where('cod_pro', $productoDetalle['cod_pro'])->first();
-    
+
                 // Verificar si el producto existe y si hay suficiente stock
                 if ($producto) {
                     if ($producto->cantidad >= $productoDetalle['cantidad']) {
@@ -88,7 +88,7 @@ class VentaController extends Controller
                             'venta_id' => $venta->id,
                             'cantidad' => $productoDetalle['cantidad'],
                         ]);
-    
+
                         // Actualizar el stock del producto
                         $producto->cantidad -= $productoDetalle['cantidad']; // Reducir el stock
                         $producto->save(); // Guardar los cambios
@@ -101,24 +101,24 @@ class VentaController extends Controller
                     throw new \Exception("Producto no encontrado: " . $productoDetalle['cod_pro']);
                 }
             }
-    
+
             // Si todo es exitoso, confirmamos la transacción
             DB::commit();
-    
+
             // Vaciar los productos seleccionados de la sesión
             $this->vaciarProductos();
-    
+
             // Redirigir con un mensaje de éxito
             return redirect()->route('ventas.index')->with('success', 'Venta creada exitosamente.');
-    
+
         } catch (\Exception $e) {
             DB::rollBack();// Si ocurre un error, revertimos la transacción
-    
+
             // Devolver mensaje de error
             return redirect()->route('ventas.index')->with('error', 'Error al crear la venta: ' . $e->getMessage());
         }
     }
-    
+
 
     public function procesarVenta(Request $request)
     {
@@ -152,30 +152,31 @@ class VentaController extends Controller
             'cod_pro' => 'required|string',
             'cantidad' => 'required|numeric|min:1',
         ]);
-    
+
         // Recuperar los productos seleccionados como una colección
         $productosSelected = collect(session('productosSelected', []));
 
-        if($this->validarProducto($validatedData, $productosSelected) != null) {
+        if ($this->validarProducto($validatedData, $productosSelected) != null) {
             return $this->validarProducto($validatedData, $productosSelected);
         };
-                    
+
         // Guardar los productos seleccionados en la sesión
         session(['productosSelected' => $productosSelected]);
-    
+
         // Obtener todos los clientes y productos para pasarlos a la vista
         $clientes = Cliente::all();
         $productos = Producto::all();
-    
+
         // Recalcular el total
         $total = $this->recalcularTotal();
-    
+
         // Devolver la vista con los productos seleccionados
         return view('ventas.create', compact('clientes', 'productos', 'productosSelected', 'total'));
     }
 
 
-    public function validarProducto($validatedData, $productosSelected) {
+    public function validarProducto($validatedData, $productosSelected)
+    {
         // Obtener el producto por código de producto
         $producto = Producto::where('cod_pro', $validatedData['cod_pro'])->first();
 
@@ -184,17 +185,17 @@ class VentaController extends Controller
         if (!$producto) {
             return redirect()->back()->withErrors(['error' => 'Producto no encontrado.']);
         }
-    
+
         // Verificar si ya existe en la colección de productos seleccionados (usando cod_pro como clave)
         if ($productosSelected->has($validatedData['cod_pro'])) {
             // Si el producto ya está en la lista, actualizamos su cantidad
             $productoExistente = $productosSelected->get($validatedData['cod_pro']);
-            
+
             // Verificamos si la cantidad solicitada no supera el stock disponible
             if ($productoExistente->cantidad + $validatedData['cantidad'] > $producto->cantidad) {
                 return redirect()->back()->withErrors(['error' => 'No hay suficiente stock disponible.']);
             }
-            
+
             // Actualizar la cantidad del producto existente
             $productoExistente->cantidad += $validatedData['cantidad'];
         } else {
@@ -202,16 +203,16 @@ class VentaController extends Controller
             if ($producto->cantidad < $validatedData['cantidad']) {
                 return redirect()->back()->withErrors(['error' => 'No hay suficiente stock disponible.']);
             }
-    
+
             // Establece la cantidad seleccionada al objeto Producto
             $producto->cantidad = $validatedData['cantidad'];
-    
+
             // Añadir el nuevo producto a la colección, usando cod_pro como clave
             $productosSelected->put($producto->cod_pro, $producto);
         }
 
     }
-    
+
 
     public function removeProduct($cod_pro)
     {
@@ -233,15 +234,12 @@ class VentaController extends Controller
         ->with('total', $total);
     }
 
-    
-
-
 
     public function vaciarProductos()
     {
         // Vaciar todos los productos seleccionados de la sesión
         session()->forget('productosSelected');
-        
+
         // Recalcular el total
         $total = $this->recalcularTotal();
 
@@ -268,7 +266,7 @@ class VentaController extends Controller
     }
 
 
-    
-    
+
+
 
 }
